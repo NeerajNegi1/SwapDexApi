@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const users = require("./routes/users");
+const quotations = require("./routes/quotations");
 const getConfig = require("./utils/config");
 const logger = require("./utils/logger");
 
@@ -15,6 +16,7 @@ const initRoutes = async (app) => {
 
   // custom routes
   app.use("/user", users);
+  app.use("/", quotations);
 
   // 404 route
   app.use((req, res) => {
