@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const users = require("./routes/users");
 const quotations = require("./routes/quotations");
+const blockchain = require("./routes/blockchain");
 const getConfig = require("./utils/config");
 const logger = require("./utils/logger");
 
@@ -17,6 +18,7 @@ const initRoutes = async (app) => {
   // custom routes
   app.use("/user", users);
   app.use("/", quotations);
+  app.use("/", blockchain);
 
   // 404 route
   app.use((req, res) => {
@@ -43,7 +45,7 @@ const initialize = async (app) => {
   const port = await getConfig("port");
   app.listen(port, async () => {
     logger.info({
-      description: `🚀 Server is started and running on port ${port} 🚀`,
+      description: `🚀 SwapDexApi Server is started and running on port ${port} 🚀`,
     });
   });
 };

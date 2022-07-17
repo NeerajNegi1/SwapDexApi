@@ -74,4 +74,57 @@ const fetchCryptoPrice = async (req, res) => {
   }
 };
 
-module.exports = { getQuotations, getChains, fetchCryptoPrice };
+const createQuotations = async (req, res) => {
+  try {
+    const swapDexQuotations = await getConfig("swapDexQuotations");
+    const { data } = await axios.post(
+      `${swapDexQuotations}/create-quotations`,
+      req.body
+    );
+    console.log(data);
+    logger.info({
+      description: "Quotation created successfully",
+      data: data,
+    });
+    return res.status(200).json({
+      ...data,
+    });
+  } catch (error) {
+    logger.error({ description: "Error in createQuotations", error });
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const fetchQuotationStatus = async (req, res) => {
+  try {
+    const swapDexQuotations = await getConfig("swapDexQuotations");
+    const { data } = await axios.get(
+      `${swapDexQuotations}/quotation-status/${req.params.id}`
+    );
+    logger.info({
+      description:
+        "fetchQuotationStatus - Quotation status fetched successfully",
+      data: data,
+    });
+    return res.status(200).json({
+      ...data,
+    });
+  } catch (error) {
+    logger.error({ description: "Error in fetchQuotationStatus", error });
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = {
+  getQuotations,
+  getChains,
+  fetchCryptoPrice,
+  createQuotations,
+  fetchQuotationStatus,
+};
